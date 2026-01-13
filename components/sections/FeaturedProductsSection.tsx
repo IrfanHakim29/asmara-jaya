@@ -32,6 +32,7 @@ export default function FeaturedProductsSection() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("semua");
+  const [showOnlyFeatured, setShowOnlyFeatured] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,8 +43,11 @@ export default function FeaturedProductsSection() {
         const response = await fetch("/api/products");
         const data: Product[] = await response.json();
 
+        // Store all products
+        setProducts(data);
+        
+        // Show only featured by default
         const featured = data.filter((p) => p.featured);
-        setProducts(featured);
         setFilteredProducts(featured);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -74,9 +78,14 @@ export default function FeaturedProductsSection() {
     fetchCategories();
   }, []);
 
-  // Filter products based on search and category
+  // Filter products based on search, category, and featured toggle
   useEffect(() => {
     let filtered = products;
+
+    // Filter by featured status
+    if (showOnlyFeatured) {
+      filtered = filtered.filter((p) => p.featured);
+    }
 
     // Filter by category
     if (selectedCategory !== "semua") {
@@ -96,7 +105,7 @@ export default function FeaturedProductsSection() {
     }
 
     setFilteredProducts(filtered);
-  }, [searchQuery, selectedCategory, products]);
+  }, [searchQuery, selectedCategory, showOnlyFeatured, products]);
 
   return (
     <section className="py-24 bg-gradient-to-b from-white to-[#faf8f3] relative overflow-hidden">
@@ -126,9 +135,25 @@ export default function FeaturedProductsSection() {
               Produk Unggulan
             </span>
           </h2>
-          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
             Pilihan terbaik dari koleksi kami yang paling populer
           </p>
+          
+          {/* Info dan Toggle */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+            <div className="text-sm text-gray-500">
+              Menampilkan {filteredProducts.length} dari {products.length} produk
+              {showOnlyFeatured && ` (${products.filter(p => p.featured).length} unggulan)`}
+            </div>
+            <Button
+              onClick={() => setShowOnlyFeatured(!showOnlyFeatured)}
+              variant="outline"
+              size="sm"
+              className="rounded-full border-2 border-[#d4a5a5] text-[#c48b8b] hover:bg-[#f5e6e8]/50"
+            >
+              {showOnlyFeatured ? "Tampilkan Semua Produk" : "Hanya Produk Unggulan"}
+            </Button>
+          </div>
         </motion.div>
 
         {/* Search and Filter */}
