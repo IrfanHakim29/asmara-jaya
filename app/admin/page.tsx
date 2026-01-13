@@ -147,6 +147,28 @@ export default function AdminPage() {
     }
   };
 
+  // Toggle Featured Status
+  const handleToggleFeatured = async (product: Product) => {
+    try {
+      const response = await fetch('/api/products', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: product.id,
+          featured: !product.featured
+        })
+      });
+
+      if (response.ok) {
+        await fetchProducts();
+        // Silent update - no alert
+      }
+    } catch (error) {
+      console.error('Error toggling featured:', error);
+      alert("❌ Gagal mengubah status unggulan");
+    }
+  };
+
   const handleCancel = () => {
     setEditingId(null);
     setEditForm({});
@@ -408,6 +430,7 @@ export default function AdminPage() {
                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">ID</th>
                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Produk</th>
                     <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">Kategori</th>
+                    <th className="text-center py-4 px-4 text-sm font-semibold text-gray-700">Unggulan</th>
                     <th className="text-right py-4 px-4 text-sm font-semibold text-gray-700">Aksi</th>
                   </tr>
                 </thead>
@@ -447,6 +470,16 @@ export default function AdminPage() {
                               ))}
                             </select>
                           </td>
+                          <td className="py-4 px-4 text-center">
+                            <div className="flex items-center justify-center">
+                              <input
+                                type="checkbox"
+                                checked={editForm.featured || false}
+                                onChange={(e) => setEditForm({ ...editForm, featured: e.target.checked })}
+                                className="w-5 h-5 rounded border-gray-300 text-[#c48b8b] focus:ring-[#c48b8b]"
+                              />
+                            </div>
+                          </td>
                           <td className="py-4 px-4 text-right">
                             <div className="flex justify-end gap-2">
                               <Button size="sm" onClick={handleSave} className="bg-gradient-to-r from-[#c9d5b5] to-[#b5c49d] text-white">
@@ -476,6 +509,23 @@ export default function AdminPage() {
                             <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#f5e6e8] text-[#c48b8b] capitalize">
                               {product.category}
                             </span>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="flex items-center justify-center">
+                              <button
+                                onClick={() => handleToggleFeatured(product)}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#c48b8b] focus:ring-offset-2 ${
+                                  product.featured ? 'bg-[#c48b8b]' : 'bg-gray-300'
+                                }`}
+                                title={product.featured ? "Klik untuk nonaktifkan unggulan" : "Klik untuk jadikan unggulan"}
+                              >
+                                <span
+                                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                    product.featured ? 'translate-x-6' : 'translate-x-1'
+                                  }`}
+                                />
+                              </button>
+                            </div>
                           </td>
                           <td className="py-4 px-4 text-right">
                             <div className="flex justify-end gap-2">
