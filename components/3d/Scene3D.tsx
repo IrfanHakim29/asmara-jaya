@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, Environment } from "@react-three/drei";
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useState, useEffect, useMemo } from "react";
 import { FloatingFlower, FloatingTeddy, RotatingPot } from "./FloatingElements";
 import { useDeviceDetect } from "@/lib/useDeviceDetect";
 
@@ -37,27 +37,58 @@ export default function Scene3D({
   enableControls = false,
   className = "" 
 }: Scene3DProps) {
-  const { isMobile } = useDeviceDetect();
+  const { isMobile, isHydrated } = useDeviceDetect();
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    // Wait for hydration to complete before showing Canvas
+    if (isHydrated) {
+      // Small delay to ensure smooth transition
+      const timer = setTimeout(() => setIsLoaded(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isHydrated]);
+  
+  // Memoize GL config to prevent re-render flickering
+  const glConfig = useMemo(() => ({
+    antialias: !isMobile,
+    powerPreference: isMobile ? "low-power" as const : "high-performance" as const,
+    alpha: true,
+    stencil: false,
+    depth: true,
+    preserveDrawingBuffer: false,
+  }), [isMobile]);
+
+  const dprConfig = useMemo(() => 
+    isMobile ? [1, 1.5] as [number, number] : [1, 2] as [number, number], 
+    [isMobile]
+  );
+
+  const canvasStyle = useMemo(() => ({
+    touchAction: 'auto' as const,
+    WebkitTapHighlightColor: 'transparent',
+  }), []);
+  
+  // Show loading placeholder to prevent flicker
+  if (!isHydrated || !isLoaded) {
+    return (
+      <div className={`w-full h-full flex items-center justify-center ${className}`}>
+        <div className="animate-pulse">
+          <div className="w-32 h-32 bg-linear-to-br from-pink-200/50 to-purple-200/50 rounded-full" />
+        </div>
+      </div>
+    );
+  }
   
   return (
-    <div className={`w-full h-full ${className}`}>
+    <div className={`w-full h-full ${className} animate-in fade-in duration-500`}>
       <Canvas 
         shadows={!isMobile}
         frameloop="always"
-        gl={{ 
-          antialias: !isMobile,
-          powerPreference: isMobile ? "low-power" : "high-performance",
-          alpha: true,
-          stencil: false,
-          depth: true,
-          preserveDrawingBuffer: false,
-        }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        gl={glConfig}
+        dpr={dprConfig}
         performance={{ min: 0.5 }}
-        style={{ 
-          touchAction: 'auto',
-          WebkitTapHighlightColor: 'transparent'
-        }}
+        style={canvasStyle}
       >
         {/* FPS Limiter untuk mobile - batasi ke 30 FPS untuk mencegah flickering */}
         {isMobile && <FPSLimiter fps={30} />}
@@ -87,7 +118,12 @@ export default function Scene3D({
         {!isMobile && <Environment preset="sunset" />}
 
         {/* 3D Elements */}
-        <Suspense fallback={null}>
+        <Suspense fallback={
+          <mesh>
+            <sphereGeometry args={[0.5, 16, 16]} />
+            <meshBasicMaterial color="#ff69b4" wireframe />
+          </mesh>
+        }>
           {(type === "flower" || type === "all") && (
             <FloatingFlower position={[0, 0, 0]} />
           )}

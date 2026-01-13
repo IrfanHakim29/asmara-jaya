@@ -65,6 +65,15 @@
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    /* Prevent layout shift during load */
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Prevent content layout shift (CLS) */
+  * {
+    content-visibility: auto;
   }
 }
 
@@ -149,12 +158,39 @@ html.lenis body {
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
 
 .animate-rotate-slow {
   animation: rotate-slow 20s linear infinite;
+}
+
+/* Smooth fade-in for 3D Canvas - prevents flickering */
+.animate-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.duration-500 {
+  animation-duration: 0.5s;
+}
+
+.duration-300 {
+  animation-duration: 0.3s;
 }
 
 /* Custom scrollbar - Tema Asmara */
