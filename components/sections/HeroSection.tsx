@@ -6,19 +6,24 @@ import { ShoppingBag, Phone, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRef, useEffect } from "react";
 import Image from "next/image";
+import { useDeviceDetect } from "@/lib/useDeviceDetect";
 
 export default function HeroSection() {
+  const { isMobile, isTablet } = useDeviceDetect();
+  const isLowPerformance = isMobile || isTablet;
+  
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  // Disable parallax effects on mobile for better performance
+  const y = useTransform(scrollYProgress, [0, 1], isLowPerformance ? ["0%", "0%"] : ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
+  const scale = useTransform(scrollYProgress, [0, 1], isLowPerformance ? [1, 1] : [1, 0.8]);
 
-  // Mouse tracking for parallax effect
+  // Mouse tracking for parallax effect - disabled on mobile
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
@@ -27,6 +32,9 @@ export default function HeroSection() {
   const y2 = useSpring(mouseY, springConfig);
 
   useEffect(() => {
+    // Skip mouse tracking on mobile devices for performance
+    if (isLowPerformance) return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
       const { innerWidth, innerHeight } = window;
@@ -36,7 +44,7 @@ export default function HeroSection() {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, isLowPerformance]);
 
   return (
     <section
@@ -44,34 +52,46 @@ export default function HeroSection() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#faf8f3] via-[#f5e6e8] to-[#e8d4d7]"
     >
       {/* Animated Background Gradients - Tema Asmara Soft */}
+      {/* Disable heavy animations on mobile */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 45, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#d4a5a5]/30 to-transparent rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            rotate: [0, -45, 0],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-[#c9d5b5]/30 to-transparent rounded-full blur-3xl"
-        />
+        {!isLowPerformance ? (
+          <>
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                rotate: [0, 45, 0],
+              }}
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#d4a5a5]/30 to-transparent rounded-full blur-3xl"
+            />
+            <motion.div
+              animate={{
+                scale: [1, 1.3, 1],
+                rotate: [0, -45, 0],
+              }}
+              transition={{
+                duration: 30,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-[#c9d5b5]/30 to-transparent rounded-full blur-3xl"
+            />
+          </>
+        ) : (
+          <>
+            {/* Static background for mobile - no animation */}
+            <div className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#d4a5a5]/20 to-transparent rounded-full blur-2xl" />
+            <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-[#c9d5b5]/20 to-transparent rounded-full blur-2xl" />
+          </>
+        )}
       </div>
 
       {/* Floating Product Images with Parallax */}
+      {/* Simplified on mobile for better performance */}
       <motion.div
         style={{ y, scale }}
         className="absolute inset-0 pointer-events-none"
@@ -79,11 +99,11 @@ export default function HeroSection() {
         <div className="relative w-full h-full">
           {/* Main center image */}
           <motion.div
-            style={{ x, y: y2 }}
+            style={isLowPerformance ? {} : { x, y: y2 }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             <motion.div
-              animate={{
+              animate={isLowPerformance ? {} : {
                 y: [0, -20, 0],
                 rotate: [0, 5, 0],
               }}
@@ -94,107 +114,113 @@ export default function HeroSection() {
               }}
               className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-3xl" />
+              <div className={`absolute inset-0 bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full ${isLowPerformance ? 'blur-2xl' : 'blur-3xl'}`} />
               <div className="relative w-full h-full flex items-center justify-center">
                 <Sparkles className="w-32 h-32 md:w-48 md:h-48 text-pink-400/60" />
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Floating image - top right */}
-          <motion.div
-            style={{ x: useTransform(x, (v) => v * 1.5), y: useTransform(y2, (v) => v * 1.2) }}
-            className="hidden lg:block absolute top-20 right-20"
-          >
+          {/* Floating image - top right - Hide on mobile */}
+          {!isLowPerformance && (
             <motion.div
-              animate={{
-                y: [0, 30, 0],
-                rotate: [5, -5, 5],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              whileHover={{ scale: 1.1, rotate: 0 }}
-              className="w-40 h-40 bg-white rounded-2xl shadow-2xl p-4 backdrop-blur-sm"
+              style={{ x: useTransform(x, (v) => v * 1.5), y: useTransform(y2, (v) => v * 1.2) }}
+              className="hidden lg:block absolute top-20 right-20"
             >
+              <motion.div
+                animate={{
+                  y: [0, 30, 0],
+                  rotate: [5, -5, 5],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                whileHover={{ scale: 1.1, rotate: 0 }}
+                className="w-40 h-40 bg-white rounded-2xl shadow-2xl p-4 backdrop-blur-sm"
+              >
               <div className="w-full h-full bg-gradient-to-br from-[#f5e6e8] to-[#e8d4d7] rounded-xl flex items-center justify-center">
                 <span className="text-4xl">🌸</span>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Floating image - bottom left */}
-          <motion.div
-            style={{ x: useTransform(x, (v) => v * -1.3), y: useTransform(y2, (v) => v * -1.5) }}
-            className="hidden lg:block absolute bottom-20 left-20"
-          >
+          {/* Floating image - bottom left - Hide on mobile */}
+          {!isLowPerformance && (
             <motion.div
-              animate={{
-                y: [0, -25, 0],
-                rotate: [-5, 5, -5],
-              }}
-              transition={{
-                duration: 7,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              whileHover={{ scale: 1.1, rotate: 0 }}
-              className="w-40 h-40 bg-white rounded-2xl shadow-2xl p-4 backdrop-blur-sm"
+              style={{ x: useTransform(x, (v) => v * -1.3), y: useTransform(y2, (v) => v * -1.5) }}
+              className="hidden lg:block absolute bottom-20 left-20"
             >
+              <motion.div
+                animate={{
+                  y: [0, -25, 0],
+                  rotate: [-5, 5, -5],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                whileHover={{ scale: 1.1, rotate: 0 }}
+                className="w-40 h-40 bg-white rounded-2xl shadow-2xl p-4 backdrop-blur-sm"
+              >
               <div className="w-full h-full bg-gradient-to-br from-[#c9d5b5] to-[#b5c49d] rounded-xl flex items-center justify-center">
                 <span className="text-4xl">🧸</span>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Additional floating elements */}
-          <motion.div
-            style={{ x: useTransform(x, (v) => v * -0.8), y: useTransform(y2, (v) => v * 1.8) }}
-            className="hidden md:block absolute top-32 left-32"
-          >
-            <motion.div
-              animate={{
-                y: [0, 20, 0],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              whileHover={{ scale: 1.2 }}
-              className="w-24 h-24 bg-white/80 rounded-full shadow-xl p-3 backdrop-blur-sm"
-            >
-              <div className="w-full h-full bg-gradient-to-br from-[#d4af37]/40 to-[#c49a1f]/40 rounded-full flex items-center justify-center">
-                <span className="text-2xl">✨</span>
-              </div>
-            </motion.div>
-          </motion.div>
+          {/* Additional floating elements - Hide on mobile */}
+          {!isLowPerformance && (
+            <>
+              <motion.div
+                style={{ x: useTransform(x, (v) => v * -0.8), y: useTransform(y2, (v) => v * 1.8) }}
+                className="hidden md:block absolute top-32 left-32"
+              >
+                <motion.div
+                  animate={{
+                    y: [0, 20, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  whileHover={{ scale: 1.2 }}
+                  className="w-24 h-24 bg-white/80 rounded-full shadow-xl p-3 backdrop-blur-sm"
+                >
+                  <div className="w-full h-full bg-gradient-to-br from-[#d4af37]/40 to-[#c49a1f]/40 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">✨</span>
+                  </div>
+                </motion.div>
+              </motion.div>
 
-          <motion.div
-            style={{ x: useTransform(x, (v) => v * 1.2), y: useTransform(y2, (v) => v * -1.2) }}
-            className="hidden md:block absolute bottom-32 right-32"
-          >
-            <motion.div
-              animate={{
-                y: [0, -15, 0],
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              whileHover={{ scale: 1.2 }}
-              className="w-24 h-24 bg-white/80 rounded-full shadow-xl p-3 backdrop-blur-sm"
-            >
-              <div className="w-full h-full bg-gradient-to-br from-[#d4a5a5]/60 to-[#c48b8b]/60 rounded-full flex items-center justify-center">
-                <span className="text-2xl">💝</span>
-              </div>
-            </motion.div>
-          </motion.div>
+              <motion.div
+                style={{ x: useTransform(x, (v) => v * 1.2), y: useTransform(y2, (v) => v * -1.2) }}
+                className="hidden md:block absolute bottom-32 right-32"
+              >
+                <motion.div
+                  animate={{
+                    y: [0, -15, 0],
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  whileHover={{ scale: 1.2 }}
+                  className="w-24 h-24 bg-white/80 rounded-full shadow-xl p-3 backdrop-blur-sm"
+                >
+                  <div className="w-full h-full bg-gradient-to-br from-[#d4a5a5]/60 to-[#c48b8b]/60 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">💝</span>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </>
+          )}
         </div>
       </motion.div>
 

@@ -4,6 +4,7 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Flower2, Heart, Sparkles, ArrowRight } from "lucide-react";
+import { useDeviceDetect } from "@/lib/useDeviceDetect";
 
 const categories = [
   {
@@ -92,6 +93,9 @@ export default function CategoriesSection() {
 // Separate component for better hover handling
 function CategoryCard({ category, index }: { category: typeof categories[0], index: number }) {
   const Icon = category.icon;
+  const { isMobile, isTablet } = useDeviceDetect();
+  const isLowPerformance = isMobile || isTablet;
+  
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -99,6 +103,8 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
   const rotateY = useTransform(mouseX, [-0.5, 0.5], [-10, 10]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isLowPerformance) return; // Skip on mobile
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -111,6 +117,7 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
   };
 
   const handleMouseLeave = () => {
+    if (isLowPerformance) return;
     mouseX.set(0);
     mouseY.set(0);
   };
@@ -126,12 +133,12 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
         <motion.div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          style={{
+          style={isLowPerformance ? {} : {
             rotateX,
             rotateY,
             transformStyle: "preserve-3d",
           }}
-          whileHover={{ scale: 1.02 }}
+          whileHover={isLowPerformance ? {} : { scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           className="relative group cursor-pointer h-full"
         >
@@ -146,7 +153,7 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
             {/* Emoji Illustration */}
             <div className="relative w-full h-48 mb-6 flex items-center justify-center">
               <motion.div
-                animate={{
+                animate={isLowPerformance ? {} : {
                   y: [0, -15, 0],
                   rotate: [0, 5, 0],
                 }}
@@ -156,12 +163,12 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
                   ease: "easeInOut",
                   delay: index * 0.2,
                 }}
-                whileHover={{
+                whileHover={isLowPerformance ? {} : {
                   scale: 1.2,
                   rotate: 0,
                 }}
                 className="text-9xl filter drop-shadow-2xl"
-                style={{ transformStyle: "preserve-3d", transform: "translateZ(50px)" }}
+                style={isLowPerformance ? {} : { transformStyle: "preserve-3d", transform: "translateZ(50px)" }}
               >
                 {category.emoji}
               </motion.div>
@@ -172,7 +179,7 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
               {/* Icon & Count Badge */}
               <div className="flex items-center justify-between mb-4">
                 <motion.div
-                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  whileHover={isLowPerformance ? {} : { rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.5 }}
                   className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${category.color} flex items-center justify-center shadow-lg`}
                 >
@@ -180,7 +187,7 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
                 </motion.div>
 
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={isLowPerformance ? {} : { scale: 1.05 }}
                   className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md"
                 >
                   <span className="text-sm font-bold text-gray-700">
@@ -208,12 +215,14 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
             </div>
 
             {/* Hover Glow Effect */}
-            <motion.div 
-              className={`absolute inset-0 bg-gradient-to-br ${category.color} rounded-3xl`}
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 0.1 }}
-              transition={{ duration: 0.3 }}
-            />
+            {!isLowPerformance && (
+              <motion.div 
+                className={`absolute inset-0 bg-gradient-to-br ${category.color} rounded-3xl`}
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 0.1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
           </div>
         </motion.div>
       </Link>

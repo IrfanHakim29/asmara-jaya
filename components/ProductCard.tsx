@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Eye, MessageCircle, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { useDeviceDetect } from "@/lib/useDeviceDetect";
 
 interface Product {
   id: number;
@@ -45,6 +46,9 @@ const categoryConfig = {
 
 export default function ProductCard({ product, index = 0 }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
+  const { isMobile, isTablet } = useDeviceDetect();
+  const isLowPerformance = isMobile || isTablet;
+  
   const config = categoryConfig[product.category as keyof typeof categoryConfig];
 
   const whatsappMessage = `Halo, saya tertarik dengan produk *${product.name}*. Apakah masih tersedia?`;
@@ -117,7 +121,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             {product.featured && (
               <div className="absolute top-4 right-4 z-10">
                 <motion.div
-                  animate={{ rotate: [0, 5, 0, -5, 0] }}
+                  animate={isLowPerformance ? {} : { rotate: [0, 5, 0, -5, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
                   className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1"
                 >

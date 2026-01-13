@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Heart, MapPin, Gift } from "lucide-react";
+import { useDeviceDetect } from "@/lib/useDeviceDetect";
 
 const features = [
   {
@@ -75,6 +76,9 @@ export default function FeaturesSection() {
 // Separate component for better hover handling
 function FeatureCard({ feature, index }: { feature: typeof features[0], index: number }) {
   const Icon = feature.icon;
+  const { isMobile, isTablet } = useDeviceDetect();
+  const isLowPerformance = isMobile || isTablet;
+  
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -82,6 +86,8 @@ function FeatureCard({ feature, index }: { feature: typeof features[0], index: n
   const rotateY = useTransform(mouseX, [-0.5, 0.5], [-7, 7]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isLowPerformance) return; // Skip on mobile
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -94,6 +100,7 @@ function FeatureCard({ feature, index }: { feature: typeof features[0], index: n
   };
 
   const handleMouseLeave = () => {
+    if (isLowPerformance) return;
     mouseX.set(0);
     mouseY.set(0);
   };
@@ -106,21 +113,21 @@ function FeatureCard({ feature, index }: { feature: typeof features[0], index: n
       transition={{ duration: 0.6, delay: index * 0.2 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{
+      style={isLowPerformance ? {} : {
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
       }}
-      whileHover={{ scale: 1.02, y: -5 }}
+      whileHover={isLowPerformance ? {} : { scale: 1.02, y: -5 }}
       className="relative group"
     >
       <div className="bg-white rounded-2xl p-8 shadow-lg group-hover:shadow-2xl transition-all duration-300 h-full">
         {/* Icon */}
         <motion.div
-          whileHover={{ scale: 1.1, rotate: [0, -10, 10, 0] }}
+          whileHover={isLowPerformance ? {} : { scale: 1.1, rotate: [0, -10, 10, 0] }}
           transition={{ duration: 0.5 }}
           className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 shadow-lg group-hover:shadow-xl transition-shadow`}
-          style={{ transformStyle: "preserve-3d", transform: "translateZ(30px)" }}
+          style={isLowPerformance ? {} : { transformStyle: "preserve-3d", transform: "translateZ(30px)" }}
         >
           <Icon className="w-8 h-8 text-white" />
         </motion.div>
@@ -134,20 +141,24 @@ function FeatureCard({ feature, index }: { feature: typeof features[0], index: n
         </p>
 
         {/* Decorative Elements */}
-        <motion.div 
-          className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-100/50 to-transparent rounded-bl-full"
-          initial={{ opacity: 0 }}
-          whileHover={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        />
-        
-        {/* Shine effect on hover */}
-        <motion.div
-          className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent"
-          initial={{ x: "-100%", opacity: 0 }}
-          whileHover={{ x: "100%", opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        />
+        {!isLowPerformance && (
+          <>
+            <motion.div 
+              className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-100/50 to-transparent rounded-bl-full"
+              initial={{ opacity: 0 }}
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+            
+            {/* Shine effect on hover */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              initial={{ x: "-100%", opacity: 0 }}
+              whileHover={{ x: "100%", opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            />
+          </>
+        )}
       </div>
     </motion.div>
   );
