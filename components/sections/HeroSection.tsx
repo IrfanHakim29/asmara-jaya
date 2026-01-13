@@ -31,6 +31,16 @@ export default function HeroSection() {
   const x = useSpring(mouseX, springConfig);
   const y2 = useSpring(mouseY, springConfig);
 
+  // Pre-create all transforms (hooks must be called unconditionally)
+  const xTransform1 = useTransform(x, (v) => v * 1.5);
+  const y2Transform1 = useTransform(y2, (v) => v * 1.2);
+  const xTransform2 = useTransform(x, (v) => v * -1.3);
+  const y2Transform2 = useTransform(y2, (v) => v * -1.5);
+  const xTransform3 = useTransform(x, (v) => v * -0.8);
+  const y2Transform3 = useTransform(y2, (v) => v * 1.8);
+  const xTransform4 = useTransform(x, (v) => v * 1.2);
+  const y2Transform4 = useTransform(y2, (v) => v * -1.2);
+
   useEffect(() => {
     // Skip mouse tracking on mobile devices for performance
     if (isLowPerformance) return;
@@ -124,7 +134,7 @@ export default function HeroSection() {
           {/* Floating image - top right - Hide on mobile */}
           {!isLowPerformance && (
             <motion.div
-              style={{ x: useTransform(x, (v) => v * 1.5), y: useTransform(y2, (v) => v * 1.2) }}
+              style={{ x: xTransform1, y: y2Transform1 }}
               className="hidden lg:block absolute top-20 right-20"
             >
               <motion.div
@@ -150,7 +160,7 @@ export default function HeroSection() {
           {/* Floating image - bottom left - Hide on mobile */}
           {!isLowPerformance && (
             <motion.div
-              style={{ x: useTransform(x, (v) => v * -1.3), y: useTransform(y2, (v) => v * -1.5) }}
+              style={{ x: xTransform2, y: y2Transform2 }}
               className="hidden lg:block absolute bottom-20 left-20"
             >
               <motion.div
@@ -177,7 +187,7 @@ export default function HeroSection() {
           {!isLowPerformance && (
             <>
               <motion.div
-                style={{ x: useTransform(x, (v) => v * -0.8), y: useTransform(y2, (v) => v * 1.8) }}
+                style={{ x: xTransform3, y: y2Transform3 }}
                 className="hidden md:block absolute top-32 left-32"
               >
                 <motion.div
@@ -200,7 +210,7 @@ export default function HeroSection() {
               </motion.div>
 
               <motion.div
-                style={{ x: useTransform(x, (v) => v * 1.2), y: useTransform(y2, (v) => v * -1.2) }}
+                style={{ x: xTransform4, y: y2Transform4 }}
                 className="hidden md:block absolute bottom-32 right-32"
               >
                 <motion.div
