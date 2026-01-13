@@ -140,11 +140,12 @@ export default function HeroSection() {
                 whileHover={{ scale: 1.1, rotate: 0 }}
                 className="w-40 h-40 bg-white rounded-2xl shadow-2xl p-4 backdrop-blur-sm"
               >
-              <div className="w-full h-full bg-gradient-to-br from-[#f5e6e8] to-[#e8d4d7] rounded-xl flex items-center justify-center">
-                <span className="text-4xl">🌸</span>
-              </div>
+                <div className="w-full h-full bg-gradient-to-br from-[#f5e6e8] to-[#e8d4d7] rounded-xl flex items-center justify-center">
+                  <span className="text-4xl">🌸</span>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          )}
 
           {/* Floating image - bottom left - Hide on mobile */}
           {!isLowPerformance && (
@@ -165,11 +166,12 @@ export default function HeroSection() {
                 whileHover={{ scale: 1.1, rotate: 0 }}
                 className="w-40 h-40 bg-white rounded-2xl shadow-2xl p-4 backdrop-blur-sm"
               >
-              <div className="w-full h-full bg-gradient-to-br from-[#c9d5b5] to-[#b5c49d] rounded-xl flex items-center justify-center">
-                <span className="text-4xl">🧸</span>
-              </div>
+                <div className="w-full h-full bg-gradient-to-br from-[#c9d5b5] to-[#b5c49d] rounded-xl flex items-center justify-center">
+                  <span className="text-4xl">🧸</span>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          )}
 
           {/* Additional floating elements - Hide on mobile */}
           {!isLowPerformance && (
