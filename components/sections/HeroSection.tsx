@@ -60,6 +60,7 @@ export default function HeroSection() {
     <section
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#faf8f3] via-[#f5e6e8] to-[#e8d4d7]"
+      style={isLowPerformance ? { willChange: 'auto' } : undefined}
     >
       {/* Animated Background Gradients - Tema Asmara Soft */}
       {/* Disable heavy animations on mobile */}
@@ -93,43 +94,44 @@ export default function HeroSection() {
           </>
         ) : (
           <>
-            {/* Static background for mobile - no animation */}
-            <div className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#d4a5a5]/20 to-transparent rounded-full blur-2xl" />
-            <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-[#c9d5b5]/20 to-transparent rounded-full blur-2xl" />
+            {/* Static background for mobile - no animation, no blur */}
+            <div className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#d4a5a5]/15 to-transparent rounded-full" />
+            <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-[#c9d5b5]/15 to-transparent rounded-full" />
           </>
         )}
       </div>
 
       {/* Floating Product Images with Parallax */}
       {/* Simplified on mobile for better performance */}
-      <motion.div
-        style={{ y, scale }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        <div className="relative w-full h-full">
-          {/* Main center image */}
-          <motion.div
-            style={isLowPerformance ? {} : { x, y: y2 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          >
+      {!isLowPerformance ? (
+        <motion.div
+          style={{ y, scale }}
+          className="absolute inset-0 pointer-events-none"
+        >
+          <div className="relative w-full h-full">
+            {/* Main center image */}
             <motion.div
-              animate={isLowPerformance ? {} : {
-                y: [0, -20, 0],
-                rotate: [0, 5, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]"
+              style={{ x, y: y2 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             >
-              <div className={`absolute inset-0 bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full ${isLowPerformance ? 'blur-2xl' : 'blur-3xl'}`} />
-              <div className="relative w-full h-full flex items-center justify-center">
-                <Sparkles className="w-32 h-32 md:w-48 md:h-48 text-pink-400/60" />
-              </div>
+              <motion.div
+                animate={{
+                  y: [0, -20, 0],
+                  rotate: [0, 5, 0],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-3xl" />
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <Sparkles className="w-32 h-32 md:w-48 md:h-48 text-pink-400/60" />
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
 
           {/* Floating image - top right - Hide on mobile */}
           {!isLowPerformance && (
@@ -235,18 +237,31 @@ export default function HeroSection() {
           )}
         </div>
       </motion.div>
+      ) : (
+        // Simple static version for mobile - no animations
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="relative w-[300px] h-[300px]">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full" />
+              <div className="relative w-full h-full flex items-center justify-center">
+                <Sparkles className="w-32 h-32 text-pink-400/50" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       <motion.div
-        style={{ opacity }}
+        style={isLowPerformance ? undefined : { opacity }}
         className="relative z-10 container mx-auto px-4 py-20"
       >
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={isLowPerformance ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: isLowPerformance ? 0.2 : 0.6 }}
             className="inline-block mb-6"
           >
             <div className="bg-white/90 backdrop-blur-sm rounded-full px-6 py-2 shadow-lg border border-[#d4a5a5]/30">
@@ -258,9 +273,9 @@ export default function HeroSection() {
 
           {/* Main Title */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.2 }}
             className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           >
             <span className="bg-gradient-to-r from-[#d4a5a5] via-[#c48b8b] to-[#b57373] bg-clip-text text-transparent">
@@ -270,9 +285,9 @@ export default function HeroSection() {
 
           {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.4 }}
             className="text-xl md:text-2xl text-gray-700 mb-4 font-medium"
           >
             Bunga Pot, Boneka Mainan & Aksesoris
@@ -280,9 +295,9 @@ export default function HeroSection() {
 
           {/* Description */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.5 }}
             className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto"
           >
             Temukan koleksi terlengkap bunga pot cantik, boneka mainan menggemaskan,
@@ -291,15 +306,15 @@ export default function HeroSection() {
 
           {/* CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Link href="/produk">
               <Button
                 size="lg"
-                className="gradient-primary text-white text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all border border-[#c48b8b]/20"
+                className={`gradient-primary text-white text-lg px-8 py-6 rounded-full shadow-lg ${!isLowPerformance && 'hover:shadow-xl transform hover:scale-105'} transition-all border border-[#c48b8b]/20`}
               >
                 <ShoppingBag className="w-5 h-5 mr-2" />
                 Lihat Produk
@@ -315,7 +330,7 @@ export default function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 rounded-full border-2 border-[#d4a5a5] text-[#c48b8b] hover:bg-[#f5e6e8]/50 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+                className={`text-lg px-8 py-6 rounded-full border-2 border-[#d4a5a5] text-[#c48b8b] hover:bg-[#f5e6e8]/50 shadow-lg ${!isLowPerformance && 'hover:shadow-xl transform hover:scale-105'} transition-all`}
               >
                 <Phone className="w-5 h-5 mr-2" />
                 Hubungi Kami
@@ -325,9 +340,9 @@ export default function HeroSection() {
 
           {/* Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.8 }}
             className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto"
           >
             {[

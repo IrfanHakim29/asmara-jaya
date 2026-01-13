@@ -1,5 +1,55 @@
 ﻿@import "tailwindcss";
 
+/* Performance optimization for mobile */
+@media (max-width: 768px) {
+  * {
+    /* Disable expensive effects on mobile */
+    will-change: auto !important;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Reduce animation complexity on mobile */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Disable blur effects on mobile for better performance */
+  .blur-3xl,
+  .blur-2xl,
+  .blur-xl,
+  .blur-lg,
+  .blur-md,
+  .blur-sm {
+    filter: none !important;
+  }
+  
+  /* Disable backdrop-blur on mobile - very expensive */
+  .backdrop-blur-sm,
+  .backdrop-blur,
+  .backdrop-blur-md,
+  .backdrop-blur-lg {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Simplify shadows on mobile */
+  .shadow-2xl,
+  .shadow-xl {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+  }
+  
+  /* Disable transform animations on mobile */
+  .group:hover * {
+    transform: none !important;
+  }
+}
+
 /* Custom CSS Variables - Tema Asmara */
 :root {
   --background: 0 0% 100%;

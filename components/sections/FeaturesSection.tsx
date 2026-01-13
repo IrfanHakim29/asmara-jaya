@@ -113,7 +113,7 @@ function FeatureCard({ feature, index }: { feature: typeof features[0], index: n
       transition={{ duration: 0.6, delay: index * 0.2 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={isLowPerformance ? {} : {
+      style={isLowPerformance ? { willChange: 'auto' } : {
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",

@@ -133,7 +133,7 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
         <motion.div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          style={isLowPerformance ? {} : {
+          style={isLowPerformance ? { willChange: 'auto' } : {
             rotateX,
             rotateY,
             transformStyle: "preserve-3d",

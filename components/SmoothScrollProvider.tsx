@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, ReactNode } from "react";
+import { useEffect, ReactNode, useState } from "react";
 import Lenis from "lenis";
 
 interface SmoothScrollProviderProps {
@@ -10,8 +10,26 @@ interface SmoothScrollProviderProps {
 export default function SmoothScrollProvider({
   children,
 }: SmoothScrollProviderProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    // Initialize Lenis
+    // Detect mobile
+    const checkMobile = () => {
+      const width = window.innerWidth;
+      const userAgent = navigator.userAgent.toLowerCase();
+      const mobileRegex = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i;
+      setIsMobile(mobileRegex.test(userAgent) || width < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    // Disable smooth scroll on mobile for better performance
+    if (isMobile) {
+      return () => window.removeEventListener("resize", checkMobile);
+    }
+
+    // Initialize Lenis only on desktop
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -34,8 +52,9 @@ export default function SmoothScrollProvider({
     // Cleanup
     return () => {
       lenis.destroy();
+      window.removeEventListener("resize", checkMobile);
     };
-  }, []);
+  }, [isMobile]);
 
   return <>{children}</>;
 }
