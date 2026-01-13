@@ -9,8 +9,9 @@ import Image from "next/image";
 import { useDeviceDetect } from "@/lib/useDeviceDetect";
 
 export default function HeroSection() {
-  const { isMobile, isTablet } = useDeviceDetect();
-  const isLowPerformance = isMobile || isTablet;
+  const { isMobile, isTablet, isHydrated } = useDeviceDetect();
+  // Only apply low performance mode after hydration to prevent mismatch
+  const isLowPerformance = isHydrated && (isMobile || isTablet);
   
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -60,12 +61,12 @@ export default function HeroSection() {
     <section
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#faf8f3] via-[#f5e6e8] to-[#e8d4d7]"
-      style={isLowPerformance ? { willChange: 'auto' } : undefined}
     >
       {/* Animated Background Gradients - Tema Asmara Soft */}
       {/* Disable heavy animations on mobile */}
       <div className="absolute inset-0 overflow-hidden">
-        {!isLowPerformance ? (
+        {/* Always render desktop version during SSR, switch after hydration */}
+        {(!isHydrated || !isLowPerformance) ? (
           <>
             <motion.div
               animate={{
@@ -78,6 +79,7 @@ export default function HeroSection() {
                 ease: "linear",
               }}
               className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#d4a5a5]/30 to-transparent rounded-full blur-3xl"
+              style={isLowPerformance ? { display: 'none' } : undefined}
             />
             <motion.div
               animate={{
@@ -90,11 +92,13 @@ export default function HeroSection() {
                 ease: "linear",
               }}
               className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-[#c9d5b5]/30 to-transparent rounded-full blur-3xl"
+              style={isLowPerformance ? { display: 'none' } : undefined}
             />
           </>
-        ) : (
+        ) : null}
+        {/* Static background for mobile - only show after hydration */}
+        {isHydrated && isLowPerformance && (
           <>
-            {/* Static background for mobile - no animation, no blur */}
             <div className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#d4a5a5]/15 to-transparent rounded-full" />
             <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-[#c9d5b5]/15 to-transparent rounded-full" />
           </>
@@ -103,7 +107,8 @@ export default function HeroSection() {
 
       {/* Floating Product Images with Parallax */}
       {/* Simplified on mobile for better performance */}
-      {!isLowPerformance ? (
+      {/* Render desktop version for SSR, switch after hydration */}
+      {(!isHydrated || !isLowPerformance) ? (
         <motion.div
           style={{ y, scale }}
           className="absolute inset-0 pointer-events-none"
@@ -237,8 +242,10 @@ export default function HeroSection() {
           )}
         </div>
       </motion.div>
-      ) : (
-        // Simple static version for mobile - no animations
+      ) : null}
+      
+      {/* Simple static version for mobile - only after hydration */}
+      {isHydrated && isLowPerformance && (
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="relative w-[300px] h-[300px]">
@@ -253,15 +260,15 @@ export default function HeroSection() {
 
       {/* Content */}
       <motion.div
-        style={isLowPerformance ? undefined : { opacity }}
+        style={(isHydrated && isLowPerformance) ? undefined : { opacity }}
         className="relative z-10 container mx-auto px-4 py-20"
       >
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div
-            initial={isLowPerformance ? false : { opacity: 0, y: 20 }}
+            initial={(isHydrated && isLowPerformance) ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isLowPerformance ? 0.2 : 0.6 }}
+            transition={{ duration: (isHydrated && isLowPerformance) ? 0.2 : 0.6 }}
             className="inline-block mb-6"
           >
             <div className="bg-white/90 backdrop-blur-sm rounded-full px-6 py-2 shadow-lg border border-[#d4a5a5]/30">
@@ -273,9 +280,9 @@ export default function HeroSection() {
 
           {/* Main Title */}
           <motion.h1
-            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
+            initial={(isHydrated && isLowPerformance) ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.2 }}
+            transition={{ duration: (isHydrated && isLowPerformance) ? 0.2 : 0.6, delay: (isHydrated && isLowPerformance) ? 0 : 0.2 }}
             className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           >
             <span className="bg-gradient-to-r from-[#d4a5a5] via-[#c48b8b] to-[#b57373] bg-clip-text text-transparent">
@@ -285,9 +292,9 @@ export default function HeroSection() {
 
           {/* Subtitle */}
           <motion.p
-            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
+            initial={(isHydrated && isLowPerformance) ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.4 }}
+            transition={{ duration: (isHydrated && isLowPerformance) ? 0.2 : 0.6, delay: (isHydrated && isLowPerformance) ? 0 : 0.4 }}
             className="text-xl md:text-2xl text-gray-700 mb-4 font-medium"
           >
             Bunga Pot, Boneka Mainan & Aksesoris
@@ -295,9 +302,9 @@ export default function HeroSection() {
 
           {/* Description */}
           <motion.p
-            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
+            initial={(isHydrated && isLowPerformance) ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.5 }}
+            transition={{ duration: (isHydrated && isLowPerformance) ? 0.2 : 0.6, delay: (isHydrated && isLowPerformance) ? 0 : 0.5 }}
             className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto"
           >
             Temukan koleksi terlengkap bunga pot cantik, boneka mainan menggemaskan,
@@ -306,15 +313,15 @@ export default function HeroSection() {
 
           {/* CTA Buttons */}
           <motion.div
-            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
+            initial={(isHydrated && isLowPerformance) ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.6 }}
+            transition={{ duration: (isHydrated && isLowPerformance) ? 0.2 : 0.6, delay: (isHydrated && isLowPerformance) ? 0 : 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Link href="/produk">
               <Button
                 size="lg"
-                className={`gradient-primary text-white text-lg px-8 py-6 rounded-full shadow-lg ${!isLowPerformance && 'hover:shadow-xl transform hover:scale-105'} transition-all border border-[#c48b8b]/20`}
+                className={`gradient-primary text-white text-lg px-8 py-6 rounded-full shadow-lg ${(!isHydrated || !isLowPerformance) && 'hover:shadow-xl transform hover:scale-105'} transition-all border border-[#c48b8b]/20`}
               >
                 <ShoppingBag className="w-5 h-5 mr-2" />
                 Lihat Produk
@@ -330,7 +337,7 @@ export default function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className={`text-lg px-8 py-6 rounded-full border-2 border-[#d4a5a5] text-[#c48b8b] hover:bg-[#f5e6e8]/50 shadow-lg ${!isLowPerformance && 'hover:shadow-xl transform hover:scale-105'} transition-all`}
+                className={`text-lg px-8 py-6 rounded-full border-2 border-[#d4a5a5] text-[#c48b8b] hover:bg-[#f5e6e8]/50 shadow-lg ${(!isHydrated || !isLowPerformance) && 'hover:shadow-xl transform hover:scale-105'} transition-all`}
               >
                 <Phone className="w-5 h-5 mr-2" />
                 Hubungi Kami
@@ -340,9 +347,9 @@ export default function HeroSection() {
 
           {/* Stats */}
           <motion.div
-            initial={isLowPerformance ? false : { opacity: 0, y: 30 }}
+            initial={(isHydrated && isLowPerformance) ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isLowPerformance ? 0.2 : 0.6, delay: isLowPerformance ? 0 : 0.8 }}
+            transition={{ duration: (isHydrated && isLowPerformance) ? 0.2 : 0.6, delay: (isHydrated && isLowPerformance) ? 0 : 0.8 }}
             className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto"
           >
             {[

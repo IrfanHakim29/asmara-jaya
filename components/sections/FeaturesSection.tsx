@@ -76,8 +76,8 @@ export default function FeaturesSection() {
 // Separate component for better hover handling
 function FeatureCard({ feature, index }: { feature: typeof features[0], index: number }) {
   const Icon = feature.icon;
-  const { isMobile, isTablet } = useDeviceDetect();
-  const isLowPerformance = isMobile || isTablet;
+  const { isMobile, isTablet, isHydrated } = useDeviceDetect();
+  const isLowPerformance = isHydrated && (isMobile || isTablet);
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);

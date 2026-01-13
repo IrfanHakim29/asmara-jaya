@@ -93,8 +93,8 @@ export default function CategoriesSection() {
 // Separate component for better hover handling
 function CategoryCard({ category, index }: { category: typeof categories[0], index: number }) {
   const Icon = category.icon;
-  const { isMobile, isTablet } = useDeviceDetect();
-  const isLowPerformance = isMobile || isTablet;
+  const { isMobile, isTablet, isHydrated } = useDeviceDetect();
+  const isLowPerformance = isHydrated && (isMobile || isTablet);
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);

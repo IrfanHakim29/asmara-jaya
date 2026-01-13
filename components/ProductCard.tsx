@@ -46,8 +46,8 @@ const categoryConfig = {
 
 export default function ProductCard({ product, index = 0 }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
-  const { isMobile, isTablet } = useDeviceDetect();
-  const isLowPerformance = isMobile || isTablet;
+  const { isMobile, isTablet, isHydrated } = useDeviceDetect();
+  const isLowPerformance = isHydrated && (isMobile || isTablet);
   
   const config = categoryConfig[product.category as keyof typeof categoryConfig];
 
@@ -64,9 +64,8 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: isLowPerformance ? 0.2 : 0.5, delay: isLowPerformance ? 0 : index * 0.1 }}
+      transition={{ duration: (isHydrated && isLowPerformance) ? 0.2 : 0.5, delay: (isHydrated && isLowPerformance) ? 0 : index * 0.1 }}
       className="group h-full"
-      style={isLowPerformance ? { willChange: 'auto' } : undefined}
     >
       <div className="relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col border border-[#d4a5a5]/20">
         {/* Image Container with Gradient Overlay */}
@@ -77,7 +76,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                 src={product.images[0]}
                 alt={product.name}
                 fill
-                className={`object-cover ${!isLowPerformance && 'group-hover:scale-110'} transition-transform duration-700`}
+                className={`object-cover ${(!isHydrated || !isLowPerformance) && 'group-hover:scale-110'} transition-transform duration-700`}
                 onError={() => setImageError(true)}
               />
             ) : (
