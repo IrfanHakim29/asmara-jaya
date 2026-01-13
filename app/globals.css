@@ -2,13 +2,22 @@
 
 /* Performance optimization for mobile */
 @media (max-width: 768px) {
+  /* Optimize rendering for mobile */
   * {
-    /* Disable expensive effects on mobile */
-    will-change: auto !important;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+    /* Force GPU acceleration but avoid flickering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Apply GPU acceleration only to animated elements */
+  [class*="motion-"],
+  [class*="animate-"] {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
   }
 
   /* Reduce animation complexity on mobile */
@@ -33,7 +42,8 @@
   .backdrop-blur-sm,
   .backdrop-blur,
   .backdrop-blur-md,
-  .backdrop-blur-lg {
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
@@ -44,9 +54,17 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
   }
   
-  /* Disable transform animations on mobile */
+  /* Disable transform animations on hover for mobile */
   .group:hover * {
     transform: none !important;
+  }
+  
+  /* Prevent flickering on Canvas elements */
+  canvas {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 
