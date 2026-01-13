@@ -1,0 +1,260 @@
+[
+  {
+    "id": 1,
+    "name": "Bunga Mawar Merah Pot",
+    "slug": "bunga-mawar-merah-pot",
+    "category": "bunga",
+    "price": 85000,
+    "description": "Bunga mawar merah segar dalam pot cantik, cocok untuk hadiah spesial atau dekorasi rumah.",
+    "images": [
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 15,
+    "tags": ["bunga", "mawar", "pot", "hadiah"]
+  },
+  {
+    "id": 2,
+    "name": "Orkid Putih Premium",
+    "slug": "orkid-putih-premium",
+    "category": "bunga",
+    "price": 125000,
+    "description": "Orkid putih premium dengan kualitas terbaik, elegan dan tahan lama. Cocok untuk ruang tamu.",
+    "images": [
+      "https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1555586862-6081afaa3b5e?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 8,
+    "tags": ["bunga", "orkid", "premium", "putih"]
+  },
+  {
+    "id": 3,
+    "name": "Kaktus Mini Koleksi",
+    "slug": "kaktus-mini-koleksi",
+    "category": "bunga",
+    "price": 35000,
+    "description": "Kaktus mini lucu dalam pot keramik warna-warni. Perawatan mudah, cocok untuk meja kerja.",
+    "images": [
+      "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": false,
+    "stock": 25,
+    "tags": ["kaktus", "mini", "murah", "dekorasi"]
+  },
+  {
+    "id": 4,
+    "name": "Succulent Mix 3 Pot",
+    "slug": "succulent-mix-3-pot",
+    "category": "bunga",
+    "price": 65000,
+    "description": "Set 3 tanaman succulent berbeda dalam pot lucu. Hemat air dan mudah dirawat.",
+    "images": [
+      "https://images.unsplash.com/photo-1459156212016-c812468e2115?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 12,
+    "tags": ["succulent", "set", "hemat"]
+  },
+  {
+    "id": 5,
+    "name": "Boneka Teddy Bear Jumbo",
+    "slug": "boneka-teddy-bear-jumbo",
+    "category": "boneka",
+    "price": 150000,
+    "description": "Boneka teddy bear jumbo ukuran 60cm, sangat lembut dan lucu. Perfect untuk hadiah ulang tahun!",
+    "images": [
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1530325553241-4f6e7690cf36?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1563291074-2bf8677ac0e5?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 10,
+    "tags": ["boneka", "teddy", "jumbo", "hadiah"]
+  },
+  {
+    "id": 6,
+    "name": "Boneka Kelinci Lucu",
+    "slug": "boneka-kelinci-lucu",
+    "category": "boneka",
+    "price": 75000,
+    "description": "Boneka kelinci dengan telinga panjang yang menggemaskan. Bahan halus dan aman untuk anak.",
+    "images": [
+      "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": false,
+    "stock": 18,
+    "tags": ["boneka", "kelinci", "anak", "lucu"]
+  },
+  {
+    "id": 7,
+    "name": "Boneka Panda Imut",
+    "slug": "boneka-panda-imut",
+    "category": "boneka",
+    "price": 95000,
+    "description": "Boneka panda imut ukuran sedang. Material premium dan sangat empuk untuk dipeluk.",
+    "images": [
+      "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 14,
+    "tags": ["boneka", "panda", "imut", "empuk"]
+  },
+  {
+    "id": 8,
+    "name": "Set Boneka Karakter Disney",
+    "slug": "set-boneka-karakter-disney",
+    "category": "boneka",
+    "price": 180000,
+    "description": "Set 4 boneka karakter Disney populer. Cocok untuk koleksi atau hadiah spesial anak.",
+    "images": [
+      "https://images.unsplash.com/photo-1566454419290-a81fdf76c6c5?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": false,
+    "stock": 7,
+    "tags": ["boneka", "disney", "set", "koleksi"]
+  },
+  {
+    "id": 9,
+    "name": "Gantungan Kunci Bunga",
+    "slug": "gantungan-kunci-bunga",
+    "category": "aksesoris",
+    "price": 25000,
+    "description": "Gantungan kunci bentuk bunga handmade yang cantik. Berbagai warna tersedia.",
+    "images": [
+      "https://images.unsplash.com/photo-1585909695284-32d2985ac9c0?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": false,
+    "stock": 30,
+    "tags": ["aksesoris", "gantungan", "bunga", "murah"]
+  },
+  {
+    "id": 10,
+    "name": "Vas Bunga Keramik Modern",
+    "slug": "vas-bunga-keramik-modern",
+    "category": "aksesoris",
+    "price": 55000,
+    "description": "Vas bunga keramik dengan desain modern minimalis. Cocok untuk berbagai jenis bunga.",
+    "images": [
+      "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 20,
+    "tags": ["aksesoris", "vas", "keramik", "modern"]
+  },
+  {
+    "id": 11,
+    "name": "Pot Gantung Macrame",
+    "slug": "pot-gantung-macrame",
+    "category": "aksesoris",
+    "price": 45000,
+    "description": "Pot gantung macrame handmade untuk tanaman hias. Boho chic dan instagramable!",
+    "images": [
+      "https://images.unsplash.com/photo-1591958911259-bee2173bdccc?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 16,
+    "tags": ["aksesoris", "pot", "macrame", "gantung"]
+  },
+  {
+    "id": 12,
+    "name": "Dekorasi Kupu-kupu 3D",
+    "slug": "dekorasi-kupu-kupu-3d",
+    "category": "aksesoris",
+    "price": 35000,
+    "description": "Set dekorasi kupu-kupu 3D untuk dinding. 12 pcs berbagai ukuran dengan sticker perekat.",
+    "images": [
+      "https://images.unsplash.com/photo-1591958911259-bee2173bdccc?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1504006833117-8886a355efbf?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": false,
+    "stock": 22,
+    "tags": ["aksesoris", "dekorasi", "kupu-kupu", "3d"]
+  },
+  {
+    "id": 13,
+    "name": "Bunga Lily Oriental Pink",
+    "slug": "bunga-lily-oriental-pink",
+    "category": "bunga",
+    "price": 95000,
+    "description": "Bunga lily oriental pink harum dengan aroma khas. Cantik dan mewah untuk hadiah special.",
+    "images": [
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1589396575653-c8165232b089?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": false,
+    "stock": 11,
+    "tags": ["bunga", "lily", "pink", "harum"]
+  },
+  {
+    "id": 14,
+    "name": "Tanaman Hias Monstera",
+    "slug": "tanaman-hias-monstera",
+    "category": "bunga",
+    "price": 115000,
+    "description": "Tanaman hias monstera dalam pot. Tanaman indoor populer yang mudah perawatan.",
+    "images": [
+      "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1545241047-6083a3684587?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 9,
+    "tags": ["bunga", "monstera", "indoor", "hias"]
+  },
+  {
+    "id": 15,
+    "name": "Boneka Unicorn Rainbow",
+    "slug": "boneka-unicorn-rainbow",
+    "category": "boneka",
+    "price": 120000,
+    "description": "Boneka unicorn rainbow dengan bulu warna-warni. Magical dan super cute!",
+    "images": [
+      "https://images.unsplash.com/photo-1587045525473-c476b5be5c49?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1557180295-76eee20ae8aa?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": true,
+    "stock": 13,
+    "tags": ["boneka", "unicorn", "rainbow", "lucu"]
+  },
+  {
+    "id": 16,
+    "name": "Lampu Hias LED Bunga",
+    "slug": "lampu-hias-led-bunga",
+    "category": "aksesoris",
+    "price": 65000,
+    "description": "Lampu hias LED bentuk bunga sakura. Cahaya hangat untuk dekorasi kamar.",
+    "images": [
+      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600&h=600&fit=crop"
+    ],
+    "video": null,
+    "featured": false,
+    "stock": 19,
+    "tags": ["aksesoris", "lampu", "led", "dekorasi"]
+  }
+]

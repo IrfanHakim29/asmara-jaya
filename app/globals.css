@@ -1,26 +1,121 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
+/* Custom CSS Variables - Tema Asmara */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --asmara-rose: #d4a5a5;
+  --asmara-dusty-pink: #f5e6e8;
+  --asmara-cream: #faf8f3;
+  --asmara-gold: #d4af37;
+  --asmara-sage: #c9d5b5;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Custom smooth scroll styles */
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Gradient backgrounds - Tema Asmara Soft & Romantis */
+.gradient-primary {
+  background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #f5e6e8 0%, #e8d4d7 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #d4af37 0%, #c49a1f 100%);
+}
+
+.gradient-asmara {
+  background: linear-gradient(135deg, #faf8f3 0%, #f5e6e8 50%, #e8d4d7 100%);
+}
+
+.gradient-asmara-rose {
+  background: linear-gradient(to right, #d4a5a5, #c48b8b, #b57373);
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+/* Custom scrollbar - Tema Asmara */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #faf8f3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4a5a5, #c48b8b);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #c48b8b, #b57373);
+}
+
+/* Asmara Theme Utilities */
+.text-asmara-rose {
+  color: var(--asmara-rose);
+}
+
+.bg-asmara-cream {
+  background-color: var(--asmara-cream);
+}
+
+.border-asmara-rose {
+  border-color: var(--asmara-rose);
 }
