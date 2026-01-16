@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, ReactNode, useState } from "react";
+import { useEffect, ReactNode, useRef } from "react";
 import Lenis from "lenis";
 
 interface SmoothScrollProviderProps {
@@ -10,28 +10,22 @@ interface SmoothScrollProviderProps {
 export default function SmoothScrollProvider({
   children,
 }: SmoothScrollProviderProps) {
-  const [isMobile, setIsMobile] = useState(false);
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Detect mobile
-    const checkMobile = () => {
-      const width = window.innerWidth;
-      const userAgent = navigator.userAgent.toLowerCase();
-      const mobileRegex = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i;
-      setIsMobile(mobileRegex.test(userAgent) || width < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+    // Check for mobile or reduced motion preference
+    const isMobile = window.innerWidth < 768 || 
+      /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase());
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Disable smooth scroll on mobile for better performance
-    if (isMobile) {
-      return () => window.removeEventListener("resize", checkMobile);
+    // Skip smooth scroll on mobile or if user prefers reduced motion
+    if (isMobile || prefersReducedMotion) {
+      return;
     }
 
-    // Initialize Lenis only on desktop
+    // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.0, // Slightly faster for better responsiveness
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
@@ -41,20 +35,24 @@ export default function SmoothScrollProvider({
       infinite: false,
     });
 
-    // Request animation frame loop
+    lenisRef.current = lenis;
+
+    // Animation frame loop
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
-      window.removeEventListener("resize", checkMobile);
+      lenisRef.current = null;
     };
-  }, [isMobile]);
+  }, []);
 
   return <>{children}</>;
 }

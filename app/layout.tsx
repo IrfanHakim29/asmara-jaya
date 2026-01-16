@@ -66,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="scroll-smooth">
+    <html lang="id">
       <body className={inter.className}>
         <SmoothScrollProvider>
           <Navbar />
