@@ -281,10 +281,6 @@ export default function FeaturesSection() {
                 {/* Main Card */}
                 <div className={`relative ${feature.bgAccent} rounded-3xl p-8 lg:p-10 border border-gray-100/80 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] transition-all duration-500 h-full overflow-hidden group-hover:border-[#e8d4d7]/50`}>
                   
-                  {/* Background Number */}
-                  <span className="feature-number absolute -top-4 -right-2 text-[120px] font-bold text-gray-900 opacity-[0.03] select-none pointer-events-none leading-none">
-                    {feature.number}
-                  </span>
 
                   {/* Shine Effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
