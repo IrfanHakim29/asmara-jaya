@@ -53,16 +53,14 @@ export default function CTASection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header animation
+      // Header animation - only animate position, not opacity
       const headerElements = headerRef.current?.children;
-      if (headerElements) {
-        gsap.fromTo(
+      if (headerElements && !isMobile) {
+        gsap.from(
           headerElements,
-          { opacity: 0, y: isMobile ? 20 : 40 },
           {
-            opacity: 1,
-            y: 0,
-            duration: isMobile ? 0.5 : 0.8,
+            y: 30,
+            duration: 0.8,
             stagger: 0.1,
             ease: "power2.out",
             scrollTrigger: {
@@ -74,15 +72,13 @@ export default function CTASection() {
         );
       }
 
-      // Map card animation
-      if (mapCardRef.current) {
-        gsap.fromTo(
+      // Map card animation - only on desktop
+      if (mapCardRef.current && !isMobile) {
+        gsap.from(
           mapCardRef.current,
-          { opacity: 0, y: isMobile ? 30 : 50 },
           {
-            opacity: 1,
-            y: 0,
-            duration: isMobile ? 0.5 : 0.8,
+            y: 40,
+            duration: 0.8,
             ease: "power2.out",
             scrollTrigger: {
               trigger: mapCardRef.current,
@@ -94,12 +90,10 @@ export default function CTASection() {
 
         // Contact items
         const contactItems = mapCardRef.current.querySelectorAll('.contact-item');
-        gsap.fromTo(
+        gsap.from(
           contactItems,
-          { opacity: 0, x: isMobile ? 0 : -20 },
           {
-            opacity: 1,
-            x: 0,
+            x: -20,
             duration: 0.5,
             stagger: 0.1,
             ease: "power2.out",
@@ -112,15 +106,13 @@ export default function CTASection() {
         );
       }
 
-      // Gallery animation
-      if (galleryRef.current) {
-        gsap.fromTo(
+      // Gallery animation - only on desktop
+      if (galleryRef.current && !isMobile) {
+        gsap.from(
           galleryRef.current,
-          { opacity: 0, y: isMobile ? 30 : 50 },
           {
-            opacity: 1,
-            y: 0,
-            duration: isMobile ? 0.5 : 0.8,
+            y: 40,
+            duration: 0.8,
             ease: "power2.out",
             scrollTrigger: {
               trigger: galleryRef.current,
@@ -133,12 +125,10 @@ export default function CTASection() {
         // Gallery items
         const galleryItems = galleryRef.current.querySelectorAll('.gallery-item');
         galleryItems.forEach((item, index) => {
-          gsap.fromTo(
+          gsap.from(
             item,
-            { opacity: 0, scale: 0.9 },
             {
-              opacity: 1,
-              scale: 1,
+              scale: 0.9,
               duration: 0.5,
               delay: index * 0.08,
               ease: "power2.out",
@@ -317,7 +307,25 @@ export default function CTASection() {
               ))}
             </div>
 
-        
+            {/* Upload Note */}
+            <div className="bg-gradient-to-br from-[#fef6f6] to-[#f8f0f0] rounded-xl md:rounded-2xl p-4 md:p-5 border border-[#e8d4d7]/50">
+              <div className="flex items-start gap-3 md:gap-4">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-lg md:rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                  <span className="text-base md:text-lg">💡</span>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-gray-700 font-medium mb-1">
+                    Cara Upload Foto Toko
+                  </p>
+                  <p className="text-[10px] md:text-xs text-gray-500 leading-relaxed">
+                    Upload foto ke folder{" "}
+                    <code className="bg-white px-1.5 py-0.5 rounded text-[#c48b8b] font-mono text-[10px] md:text-xs">
+                      public/images/store/
+                    </code>
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {/* WhatsApp CTA */}
             <a
